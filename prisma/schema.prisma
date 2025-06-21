@@ -1,0 +1,85 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model User {
+  id       Int    @id @default(autoincrement())
+  username String @unique
+  password String
+  role     String
+  baseId   Int?
+  base     Base?  @relation(fields: [baseId], references: [id])
+}
+
+model Base {
+  id           Int           @id @default(autoincrement())
+  name         String
+  assets       Asset[]
+  purchases    Purchase[]
+  transfersOut Transfer[]    @relation("TransferFromBase")
+  transfersIn  Transfer[]    @relation("TransferToBase")
+  users        User[]
+  Assignment   Assignment[]
+  Expenditure  Expenditure[]
+}
+
+model Asset {
+  id          Int           @id @default(autoincrement())
+  name        String
+  purchases   Purchase[]
+  transfers   Transfer[]
+  Base        Base?         @relation(fields: [baseId], references: [id])
+  baseId      Int?
+  Assignment  Assignment[]
+  Expenditure Expenditure[]
+}
+
+model Purchase {
+  id        Int      @id @default(autoincrement())
+  asset     Asset    @relation(fields: [assetId], references: [id])
+  assetId   Int
+  base      Base     @relation(fields: [baseId], references: [id])
+  baseId    Int
+  quantity  Int
+  createdAt DateTime @default(now())
+}
+
+model Transfer {
+  id         Int      @id @default(autoincrement())
+  asset      Asset    @relation(fields: [assetId], references: [id])
+  assetId    Int
+  fromBase   Base     @relation("TransferFromBase", fields: [fromBaseId], references: [id])
+  fromBaseId Int
+  toBase     Base     @relation("TransferToBase", fields: [toBaseId], references: [id])
+  toBaseId   Int
+  quantity   Int
+  createdAt  DateTime @default(now())
+}
+
+model Assignment {
+  id         Int      @id @default(autoincrement())
+  asset      Asset    @relation(fields: [assetId], references: [id])
+  assetId    Int
+  base       Base     @relation(fields: [baseId], references: [id])
+  baseId     Int
+  assignedTo String // name of person/unit receiving
+  quantity   Int
+  createdAt  DateTime @default(now())
+}
+
+model Expenditure {
+  id        Int      @id @default(autoincrement())
+  asset     Asset    @relation(fields: [assetId], references: [id])
+  assetId   Int
+  base      Base     @relation(fields: [baseId], references: [id])
+  baseId    Int
+  reason    String
+  quantity  Int
+  createdAt DateTime @default(now())
+}
