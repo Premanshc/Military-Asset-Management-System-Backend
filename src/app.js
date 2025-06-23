@@ -13,7 +13,8 @@ const app = express();
 app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors({
-  origin: 'https://military-asset-management-system-fr.vercel.app',
+  origin: ['https://military-asset-management-system-fr.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
 app.use(express.json());
