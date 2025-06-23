@@ -13,7 +13,7 @@ const assetRoutes = require('./routes/assetRoutes');
 const app = express();
 app.use(cors({
   origin: 'https://military-asset-management-system-fr.vercel.app',
-  credentials: true
+  credentials: true,
 }));
 app.use(express.json());
 
