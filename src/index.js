@@ -15,6 +15,8 @@ app.use(cors({
   origin: ['https://military-asset-management-system-fr.vercel.app'],
   credentials: true,
 }));
+app.options('*', cors());
+
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
