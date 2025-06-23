@@ -15,7 +15,7 @@ app.use(cors({
   origin: 'https://military-asset-management-system-fr.vercel.app',
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
 }));
 
 app.options('*', cors());
